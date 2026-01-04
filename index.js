@@ -4,7 +4,7 @@ const FOREGROUND = "#101010";
 const BACKGROUND = "green";
 const ctx = game.getContext("2d");
 clear();
-point(screen({ x: 0, y: 0 }));
+point(screen(project({ x: -0, y: -0, z: 1 })));
 
 function point({ x, y }) {
   ctx.fillRect(x, y, 10, 10);
@@ -19,6 +19,13 @@ function clear() {
 function screen(p) {
   return {
     x: ((p.x + 1) / 2) * game.width,
-    y: ((p.y + 1) / 2) * game.height,
+    y: (1 - (p.y + 1) / 2) * game.height,
+  };
+}
+
+function project({ x, y, z }) {
+  return {
+    x: x / z,
+    y: y / z,
   };
 }
