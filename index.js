@@ -1,19 +1,18 @@
 game.height = 800;
 game.width = 800;
-const FOREGROUND = "#101010";
-const BACKGROUND = "green";
+const BACKGROUND = "#101010";
+const FOREGROUND = "green";
 const ctx = game.getContext("2d");
-clear();
-point(screen(project({ x: -0, y: -0, z: 1 })));
 
 function point({ x, y }) {
-  ctx.fillRect(x, y, 10, 10);
+  const s = 20;
   ctx.fillStyle = FOREGROUND;
+  ctx.fillRect(x - s / 2, y - s / 2, 20, 20);
 }
 
 function clear() {
-  ctx.fillRect(0, 0, game.height, game.width);
   ctx.fillStyle = BACKGROUND;
+  ctx.fillRect(0, 0, game.height, game.width);
 }
 
 function screen(p) {
@@ -29,3 +28,18 @@ function project({ x, y, z }) {
     y: y / z,
   };
 }
+
+const FPS = 60;
+let dz = 0;
+function frame() {
+  let dt = 1 / FPS; //sync with timing
+  dz += 1 * dt;
+  clear();
+  point(screen(project({ x: -0.5, y: 0.5, z: 1 + dz })));
+  point(screen(project({ x: 0.5, y: 0.5, z: 1 + dz })));
+  point(screen(project({ x: -0.5, y: -0.5, z: 1 + dz })));
+  point(screen(project({ x: 0.5, y: -0.5, z: 1 + dz })));
+  setTimeout(frame, 1000 / FPS);
+}
+
+setTimeout(frame, 1000 / FPS);
