@@ -30,17 +30,17 @@ function project({ x, y, z }) {
 }
 
 const FPS = 60;
-let dz = 0;
+let dz = 1;
 const verteces = [
-  { x: -0.5, y: 0.5, z: -0.5 },
-  { x: 0.5, y: 0.5, z: -0.5 },
-  { x: -0.5, y: -0.5, z: -0.5 },
-  { x: 0.5, y: -0.5, z: -0.5 },
+  { x: -0.25, y: 0.25, z: -0.25 },
+  { x: 0.25, y: 0.25, z: -0.25 },
+  { x: -0.25, y: -0.25, z: -0.25 },
+  { x: 0.25, y: -0.25, z: -0.25 },
 
-  { x: -0.5, y: 0.5, z: 1 },
-  { x: 0.5, y: 0.5, z: 1 },
-  { x: -0.5, y: -0.5, z: 1 },
-  { x: 0.5, y: -0.5, z: 1 },
+  { x: -0.25, y: 0.25, z: 0.25 },
+  { x: 0.25, y: 0.25, z: 0.25 },
+  { x: -0.25, y: -0.25, z: 0.25 },
+  { x: 0.25, y: -0.25, z: 0.25 },
 ];
 
 function translate({ x, y, z }, dz) {
@@ -51,12 +51,25 @@ function translate({ x, y, z }, dz) {
   };
 }
 
+let angle = 0;
+function rotate_xz({ x, y, z }, angle) {
+  const c = Math.cos(angle);
+  const s = Math.sin(angle);
+  return {
+    x: x * c - z * s,
+    y,
+    z: x * s + z * c,
+  };
+}
+
 function frame() {
   let dt = 1 / FPS; //sync with timing
-  dz += 1 * dt;
+
+  //dz += 1 * dt;
+  angle += 2 * Math.PI * dt;
   clear();
   for (const v of verteces) {
-    point(screen(project(translate(v, dz))));
+    point(screen(project(translate(rotate_xz(v, angle), dz))));
   }
   setTimeout(frame, 1000 / FPS);
 }
